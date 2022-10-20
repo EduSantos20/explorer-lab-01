@@ -9,6 +9,9 @@ function setCardType(type) {
   const colors = {
     visa: ["#436d99", "#2d57f2"],
     mastercard: ["#df6f29", "#c69347"],
+    american: ["#1f6cb4", "#fffef8"],
+    discover: ["#00A4E0", "#EF4123"],
+    jcb: ["#00823f", "#bb1933"],
     default: ["black", "gray"]
   }
 
@@ -17,6 +20,7 @@ function setCardType(type) {
   ccLogo.setAttribute("src", `cc-${type}.svg`)
 }
 setCardType("default")
+
 globalThis.setCardType = setCardType // coloquei minha função no global para poder executar ela no browser
 
 const cardNumber = document.querySelector("#card-number")
@@ -25,12 +29,12 @@ const cardNumberPattern = {
     {
       mask: "0000 0000 0000 0000",
       regex: /^3[47][0-9]{13}/,
-      cardtype: "Amex"
+      cardtype: "American"
     },
     {
       mask: "0000 0000 0000 0000",
-      regex: /^3(?:0[0-5]|[68][0-9])[0-9]{11}/,
-      cardtype: "Diners Club"
+      regex: /^(?:6011|65\d{0,2}|64[4-9]\d?)\d{0,12}/,
+      cardType: "discover"
     },
     {
       mask: "0000 0000 0000 0000",
@@ -39,8 +43,8 @@ const cardNumberPattern = {
     },
     {
       mask: "0000 0000 0000 0000",
-      regex: /^(?:2131|1800|35\d{3})\d{11}/,
-      cardtype: "JCB"
+      regex: /^(?:35\d{0,2})\d{0,12}/,
+      cardType: "jcb"
     },
 
     {
@@ -135,7 +139,16 @@ function updateSecurityCode(code) {
   ccSecutiry.innerHTML = code.length === 0 ? "123" : code
 }
 
+// button submit
 const addButton = document.querySelector("#add-card")
+
 addButton.addEventListener("click", () => {
-  alert("Cartão Adicionado!")
+  const cardDone = document.querySelector(".cc").innerHTML
+
+  if (securityCode.value === "") {
+    alert("Preencher os campos!")
+  } else {
+    alert("Cartão adicionado!")
+    window.print(cardDone)
+  }
 })
