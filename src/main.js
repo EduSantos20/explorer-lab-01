@@ -16,7 +16,7 @@ function setCardType(type) {
   ccBgColor2.setAttribute("fill", colors[type][1])
   ccLogo.setAttribute("src", `cc-${type}.svg`)
 }
-
+setCardType("default")
 globalThis.setCardType = setCardType // coloquei minha função no global para poder executar ela no browser
 
 //securityCode
