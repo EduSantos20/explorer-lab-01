@@ -19,35 +19,7 @@ function setCardType(type) {
 setCardType("default")
 globalThis.setCardType = setCardType // coloquei minha função no global para poder executar ela no browser
 
-//securityCode
-const securityCode = document.querySelector("#security-code")
-const securityCodePattern = {
-  mask: "0000"
-}
-const securityCodeMasked = IMask(securityCode, securityCodePattern)
-
-//expiration-date
-
-const expirationDate = document.querySelector("#expiration-date")
-const expirationDatePattern = {
-  mask: "MM{/}YY",
-  blocks: {
-    YY: {
-      mask: IMask.MaskedRange,
-      from: String(new Date().getFullYear()).slice(2),
-      to: String(new Date().getFullYear() + 10).slice(2)
-    },
-    MM: {
-      mask: IMask.MaskedRange,
-      from: 1,
-      to: 12
-    }
-  }
-}
-const expirationDateMasked = IMask(expirationDate, expirationDatePattern)
-
 const cardNumber = document.querySelector("#card-number")
-
 const cardNumberPattern = {
   mask: [
     {
@@ -97,33 +69,6 @@ const cardNumberPattern = {
   }
 }
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern)
-
-const addButton = document.querySelector("#add-card")
-addButton.addEventListener("click", () => {
-  alert("Cartão Adicionado!")
-})
-
-document.querySelector("form").addEventListener("submit", event => {
-  event.preventDefault()
-})
-
-const cardHolder = document.querySelector("#card-holder")
-cardHolder.addEventListener("input", () => {
-  const ccHolder = document.querySelector(".cc-holder .value")
-
-  ccHolder.innerHTML =
-    cardHolder.value.length === 0 ? "FULANO DA SILVA" : cardHolder.value
-})
-
-// cvc card
-securityCodeMasked.on("accept", () => {
-  updateSecurityCode(securityCodeMasked.value)
-})
-function updateSecurityCode(code) {
-  const ccSecutiry = document.querySelector(".cc-security .value")
-  ccSecutiry.innerHTML = code.length === 0 ? "123" : code
-}
-
 //number card
 cardNumberMasked.on("accept", () => {
   const cardType = cardNumberMasked.masked.currentMask.cardtype
@@ -135,6 +80,36 @@ function updateCardNumberMasked(number) {
   ccNumber.innerHTML = number.length === 0 ? "1234 5678 9012 3456" : number
 }
 
+const cardHolder = document.querySelector("#card-holder")
+cardHolder.addEventListener("input", () => {
+  const ccHolder = document.querySelector(".cc-holder .value")
+
+  ccHolder.innerHTML =
+    cardHolder.value.length === 0 ? "FULANO DA SILVA" : cardHolder.value
+})
+
+document.querySelector("form").addEventListener("submit", event => {
+  event.preventDefault()
+})
+
+//expiration-date
+const expirationDate = document.querySelector("#expiration-date")
+const expirationDatePattern = {
+  mask: "MM{/}YY",
+  blocks: {
+    YY: {
+      mask: IMask.MaskedRange,
+      from: String(new Date().getFullYear()).slice(2),
+      to: String(new Date().getFullYear() + 10).slice(2)
+    },
+    MM: {
+      mask: IMask.MaskedRange,
+      from: 1,
+      to: 12
+    }
+  }
+}
+const expirationDateMasked = IMask(expirationDate, expirationDatePattern)
 //experation card
 expirationDateMasked.on("accept", () => {
   updateExpirationDate(expirationDateMasked.value)
@@ -144,3 +119,23 @@ function updateExpirationDate(date) {
 
   ccExpiration.innerHTML = date.length === 0 ? "02/32" : date
 }
+
+//securityCode
+const securityCode = document.querySelector("#security-code")
+const securityCodePattern = {
+  mask: "0000"
+}
+const securityCodeMasked = IMask(securityCode, securityCodePattern)
+// cvc card
+securityCodeMasked.on("accept", () => {
+  updateSecurityCode(securityCodeMasked.value)
+})
+function updateSecurityCode(code) {
+  const ccSecutiry = document.querySelector(".cc-security .value")
+  ccSecutiry.innerHTML = code.length === 0 ? "123" : code
+}
+
+const addButton = document.querySelector("#add-card")
+addButton.addEventListener("click", () => {
+  alert("Cartão Adicionado!")
+})
